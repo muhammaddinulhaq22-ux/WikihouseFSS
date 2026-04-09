@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKIHOUSE FSS - Ensiklopedia Negara Fiksi</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; margin: 0; display: flex; background-color: #f6f6f6; color: #202122; }
+
+        /* Sidebar Khas Wiki */
+        .sidebar {
+            width: 230px; padding: 20px 15px; background: #f6f6f6;
+            height: 100vh; position: sticky; top: 0;
+            border-right: 1px solid #a7d7f9; overflow-y: auto;
+        }
+        .wiki-logo { display: block; margin: 0 auto 10px auto; width: 100px; height: auto; border-radius: 50%; }
+        .logo-text { font-family: serif; font-size: 1.1em; margin-bottom: 20px; text-align: center; font-weight: bold; }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { margin-bottom: 12px; font-size: 0.85em; border-bottom: 1px solid #eef0f2; padding-bottom: 5px; }
+        .sidebar b { display: block; margin-top: 15px; margin-bottom: 5px; color: #54595d; text-transform: uppercase; font-size: 0.75em; }
+        .sidebar a { text-decoration: none; color: #0645ad; cursor: pointer; }
+        .sidebar a:hover { text-decoration: underline; }
+
+        /* Action Buttons Style */
+        .action-links { font-size: 0.75em; margin-top: 4px; display: flex; gap: 8px; }
+        .edit-btn { color: #198754; cursor: pointer; }
+        .del-btn { color: #dc3545; cursor: pointer; }
+
+        /* Main Content */
+        .main-container { flex: 1; background: white; padding: 20px 40px; min-height: 100vh; border-left: 1px solid #a7d7f9; }
+        
+        .welcome-banner {
+            background-color: #f8f9fa; border: 1px solid #a2a9b1;
+            padding: 20px; margin-bottom: 25px; text-align: center;
+        }
+
+        /* Fitur Gambar Baru Ahmad */
+        .feature-image-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #eaecf0;
+        }
+        .feature-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .feature-caption {
+            margin-top: 10px;
+            font-style: italic;
+            color: #444;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .pencetus-section {
+            display: flex; gap: 20px; background: #fffaf0;
+            border: 1px solid #e6dbba; padding: 20px; margin-top: 30px;
+            align-items: flex-start; border-radius: 4px;
+        }
+        .pencetus-img { width: 150px; height: auto; border: 1px solid #a2a9b1; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+        .pencetus-text { flex: 1; font-size: 0.95em; line-height: 1.6; }
+        .pencetus-text h3 { margin: 0 0 10px 0; color: #b32424; font-family: serif; font-size: 1.5em; border-bottom: 1px solid #e6dbba; }
+
+        /* Form Styling */
+        .form-container { background: #f8f9fa; border: 1px solid #a2a9b1; padding: 20px; border-radius: 4px; }
+        .form-section-title { background: #eaecf0; padding: 8px 12px; margin: 20px 0 15px 0; font-weight: bold; border-left: 5px solid #3366cc; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #a2a9b1; border-radius: 2px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .etnis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+        
+        .image-upload-box { border: 1px dashed #a2a9b1; padding: 10px; margin-bottom: 10px; background: #fff; }
+        
+        .captcha-container { margin: 20px 0; display: flex; justify-content: center; }
+
+        .btn-submit { background: #3366cc; color: white; border: none; padding: 15px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.1em; margin-top: 10px; transition: 0.2s; }
+        .btn-submit:hover { background: #2a52a4; }
+
+        .hidden { display: none; }
+        h1 { font-family: serif; border-bottom: 1px solid #a2a9b1; padding-bottom: 5px; font-weight: normal; }
+        h2 { font-family: serif; border-bottom: 1px solid #a2a9b1; color: #333; margin-top: 40px; font-weight: normal; }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <img src="https://image2url.com/r2/default/images/1775553545424-7f6f2222-ab14-4a4f-80ab-e0f806953268.jpeg" alt="Logo" class="wiki-logo">
+        <div class="logo-text">WIKIHOUSE FSS</div>
+        <ul>
+            <li><a onclick="showPage('home')">🏠 Halaman Utama</a></li>
+            <b>Kontribusi</b>
+            <li><a onclick="showPage('tambah')">➕ Tambah Halaman Baru</a></li>
+            <b>Navigasi Arsip</b>
+            <div id="dynamic-menu">
+                </div>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        
+        <div id="page-home">
+            <div class="welcome-banner">
+                <img src="https://image2url.com/r2/default/images/1775553545424-7f6f2222-ab14-4a4f-80ab-e0f806953268.jpeg" alt="Logo" style="width: 60px; margin-bottom: 10px;">
+                <h2>Selamat datang di WIKI HOUSE FSS</h2>
+                <p>Tempat ensiklopedia Negara Fiksi Maupun Organisasi Negara Fiksi</p>
+            </div>
+
+            <div class="feature-image-container">
+                <img src="https://image2url.com/r2/default/images/1775747473382-094d77d5-7c9c-458e-a448-782c642b02f3.png" alt="Mr. Ahmad FSS" class="feature-img">
+                <div class="feature-caption">Mr.Ahmad Mewujudkan WikiHouse FSS untuk semuanya</div>
+            </div>
+            
+            <header><h1>Biografi Pencetus: Mr. Ahmad</h1></header>
+
+            <div class="pencetus-section">
+                <img src="https://image2url.com/r2/default/images/1775553846248-c0f14b28-bee7-45ff-bcb8-d620e718511e.jpeg" alt="Mr. Ahmad" class="pencetus-img">
+                <div class="pencetus-text">
+                    <h3>Mr. Ahmad</h3>
+                    <p><b>Mr. Ahmad</b> merupakan sosok visioner yang menjadi pencetus utama berdirinya <b>FSS</b> serta platform <b>WIKIHOUSE FSS</b>. Perjalanan beliau di dunia negara fiksi dimulai pada tahun 2021, di mana beliau aktif membangun komunitas dan berkontribusi pada berbagai organisasi negara fiksi di skala nasional.</p>
+                    <p>Beliau merupakan pendiri dari <b>Republik Neriasia</b>. Pada tahun 2022, Mr. Ahmad melakukan terobosan dengan mendirikan <b>G20-NF</b>, organisasi negara fiksi pertama di Indonesia yang menggunakan WhatsApp sebagai basis operasional utamanya. Inovasi ini muncul di tengah tren komunitas yang saat itu masih didominasi oleh platform TikTok dan Discord.</p>
+                    <p>Kehadiran G20-NF melambungkan nama Mr. Ahmad sebagai tokoh berpengaruh di mata para penikmat negara fiksi. Memasuki tahun 2026, sebagai langkah regenerasi dan transformasi visi yang lebih luas, <b>FSS</b> resmi didirikan untuk menggantikan peran G20-NF dalam menaungi komunitas fiksi tanah air.</p>
+                </div>
+            </div>
+
+            <h2>Eksplorasi Dunia Fiksi</h2>
+            <p>Jelajahi berbagai dokumentasi negara dan organisasi yang telah terdaftar, atau buatlah sejarah baru melalui menu kontribusi di samping kiri.</p>
+        </div>
+
+        <div id="page-tambah" class="hidden">
+            <h1>Buat Entri Negara/Organisasi Baru</h1>
+            <div class="form-container">
+                
+                <div class="form-section-title">Informasi Dasar</div>
+                <div class="form-group">
+                    <label>Nama Entri (Negara/Organisasi)</label>
+                    <input type="text" id="input-name" placeholder="Contoh: Republik Neriasia">
+                </div>
+
+                <div class="form-group">
+                    <label>Semboyan Negara</label>
+                    <input type="text" id="input-motto" placeholder="Contoh: Bhinneka Tunggal Ika">
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Judul Lagu Kebangsaan</label>
+                        <input type="text" id="input-anthem-title" placeholder="Nama lagu kebangsaan">
+                    </div>
+                    <div class="form-group">
+                        <label>Unggah Lagu Kebangsaan (Audio)</label>
+                        <input type="file" id="input-anthem-file" accept="audio/*">
+                    </div>
+                </div>
+
+                <div class="form-section-title">Identitas Visual Utama</div>
+                <div class="image-upload-box">
+                    <div class="form-group">
+                        <label>Judul Gambar Utama (Misal: Bendera/Lambang)</label>
+                        <input type="text" id="main-image-title" placeholder="Contoh: Bendera Nasional">
+                    </div>
+                    <div class="form-group">
+                        <label>Pilih Gambar Utama</label>
+                        <input type="file" id="input-image" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="form-section-title">Data Teknis & Geografis</div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Luas Wilayah (km²)</label>
+                        <input type="text" id="input-area" placeholder="Contoh: 1.905.000">
+                    </div>
+                    <div class="form-group">
+                        <label>Mata Uang</label>
+                        <input type="text" id="input-currency" placeholder="Contoh: Rupiah (IDR)">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Lajur Kemudi</label>
+                        <select id="input-drive-side">
+                            <option value="Kiri">Kiri</option>
+                            <option value="Kanan">Kanan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kode Telepon</label>
+                        <input type="text" id="input-phone-code" placeholder="Contoh: +62">
+                    </div>
+                </div>
+
+                <div class="form-section-title">Kelompok Etnis (Top 5)</div>
+                <div class="etnis-grid">
+                    <input type="text" id="etnis-1" placeholder="Etnis 1">
+                    <input type="text" id="etnis-2" placeholder="Etnis 2">
+                    <input type="text" id="etnis-3" placeholder="Etnis 3">
+                    <input type="text" id="etnis-4" placeholder="Etnis 4">
+                    <input type="text" id="etnis-5" placeholder="Etnis 5">
+                </div>
+
+                <div class="form-section-title">Deskripsi Naratif</div>
+                <div class="form-group">
+                    <label>Sejarah & Deskripsi Lengkap</label>
+                    <textarea id="input-desc" rows="8" placeholder="Tuliskan sejarah berdirinya, letak geografis, atau tujuan organisasi secara mendalam..."></textarea>
+                </div>
+
+                <div class="form-section-title">Gambar Pendukung (Maksimal 3)</div>
+                <div class="grid-2">
+                    <div class="image-upload-box">
+                        <label>Judul Gambar 1</label>
+                        <input type="text" id="sub-title-1" placeholder="Judul Gambar 1" style="margin-bottom:5px">
+                        <input type="file" id="sub-img-1" accept="image/*">
+                    </div>
+                    <div class="image-upload-box">
+                        <label>Judul Gambar 2</label>
+                        <input type="text" id="sub-title-2" placeholder="Judul Gambar 2" style="margin-bottom:5px">
+                        <input type="file" id="sub-img-2" accept="image/*">
+                    </div>
+                    <div class="image-upload-box" style="grid-column: span 2;">
+                        <label>Judul Gambar 3</label>
+                        <input type="text" id="sub-title-3" placeholder="Judul Gambar 3" style="margin-bottom:5px">
+                        <input type="file" id="sub-img-3" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="captcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+                </div>
+
+                <button class="btn-submit" onclick="saveData()">🚀 Publikasikan ke WIKIHOUSE FSS</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const SECRET_CODE = "FSS2026";
+
+        window.onload = function() {
+            loadEntries();
+        };
+
+        function showPage(page) {
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-tambah').classList.add('hidden');
+            if(page === 'home') document.getElementById('page-home').classList.remove('hidden');
+            if(page === 'tambah') document.getElementById('page-tambah').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function saveData() {
+            const response = grecaptcha.getResponse();
+            if(response.length == 0) { 
+                alert("Mohon verifikasi reCAPTCHA!"); 
+                return; 
+            }
+
+            const userCode = prompt("Masukkan Kode Otoritas FSS untuk mempublikasikan artikel:");
+            if (userCode !== SECRET_CODE) {
+                alert("KODE SALAH! Otoritas ditolak.");
+                return;
+            }
+
+            const name = document.getElementById('input-name').value;
+            if(!name) { 
+                alert("Mohon isi Nama Negara/Organisasi!"); 
+                return; 
+            }
+            
+            let entries = JSON.parse(localStorage.getItem('fss_wiki_data') || '[]');
+            
+            const existingIndex = entries.findIndex(e => e.name === name);
+            if(existingIndex > -1) {
+                entries[existingIndex] = { name: name, date: new Date().toLocaleDateString() };
+            } else {
+                entries.push({ name: name, date: new Date().toLocaleDateString() });
+            }
+            
+            localStorage.setItem('fss_wiki_data', JSON.stringify(entries));
+
+            alert("Selamat! Entri '" + name + "' telah berhasil dikunci dan dipublikasikan.");
+            
+            grecaptcha.reset();
+            loadEntries(); 
+            showPage('home');
+        }
+
+        function loadEntries() {
+            const menu = document.getElementById('dynamic-menu');
+            menu.innerHTML = '<li><a onclick="showPage(\'home\')">Beranda Utama</a></li>';
+            
+            const entries = JSON.parse(localStorage.getItem('fss_wiki_data') || '[]');
+            
+            entries.forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div style="display:flex; flex-direction:column;">
+                        <a onclick="alert('Membuka dokumentasi ${entry.name}')">📄 ${entry.name}</a>
+                        <div class="action-links">
+                            <span class="edit-btn" onclick="editEntry('${entry.name}')">[Sunting]</span>
+                            <span class="del-btn" onclick="deleteEntry(${index})">[Hapus]</span>
+                        </div>
+                    </div>
+                `;
+                menu.appendChild(li);
+            });
+        }
+
+        function editEntry(name) {
+            const userCode = prompt("Masukkan Kode Otoritas FSS untuk menyunting '" + name + "':");
+            if (userCode === SECRET_CODE) {
+                showPage('tambah');
+                document.getElementById('input-name').value = name;
+                alert("Mode Sunting Aktif. Silakan lengkapi data dan publikasikan kembali.");
+            } else {
+                alert("Akses Ditolak!");
+            }
+        }
+
+        function deleteEntry(index) {
+            const userCode = prompt("PERINGATAN: Memasukkan kode akan menghapus artikel. Masukkan Kode Otoritas:");
+            if (userCode === SECRET_CODE) {
+                let entries = JSON.parse(localStorage.getItem('fss_wiki_data') || '[]');
+                entries.splice(index, 1);
+                localStorage.setItem('fss_wiki_data', JSON.stringify(entries));
+                loadEntries();
+                alert("Artikel berhasil dihapus.");
+            } else {
+                alert("Kode Salah! Penghapusan dibatalkan.");
+            }
+        }
+    </script>
+</body>
+</html>
